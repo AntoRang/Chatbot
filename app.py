@@ -22,7 +22,7 @@ def sms_reply():
     utils_sms.show_ents(msg)
     # Create reply
 
-    resp = MessagingResponse()
+    resp = git ()
     message1 = Message()
     message2 = Message()
 
