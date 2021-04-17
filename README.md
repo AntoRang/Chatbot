@@ -25,7 +25,7 @@ After getting the requirements `RUN` the app
 ~$ python app.py
 ```
 ---
-### collaborators
+### Collaborators
     Eric Gómez - A01378838@exatec.tec.mx
     Antonio Rangel - A01377364@exatec.tec.mx
     Rafael Moreno - A01378916@exatec.tec.mx
