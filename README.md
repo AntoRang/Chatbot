@@ -19,7 +19,7 @@ First make sure that the requirements are correctly installed. The dependencies 
 ```shell
 ~$ python -m spacy download es_core_news_lg
 ```
-After getting the requirements `RUN` tthe app
+After getting the requirements `RUN` the app
 
 ```shell
 ~$ python app.py
