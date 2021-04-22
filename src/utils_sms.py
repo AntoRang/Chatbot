@@ -24,7 +24,7 @@ def language(sms):
         case = 'ingles'
         english_flow = True
     else:
-        case = 'idioma no encontrado'
+        case = 'no_saludo'
 
     return case, spanish_flow, english_flow
 
@@ -35,7 +35,7 @@ def matcher(sms):
     spanish_pattern = [{'LOWER': 'hola'}, {'IS_PUNCT': False, 'OP': '*'}]
     english_pattern1 = [{'LOWER': 'hi'}, {'IS_PUNCT': False, 'OP': '*'}]
     english_pattern2 = [{'LOWER': 'hello'}, {'IS_PUNCT': False, 'OP': '*'}]
-
+    # UDF{5}
     matcher.add('Saludo_ES', [spanish_pattern])
     matcher.add('Saludo_EN', [english_pattern1, english_pattern2 ])
 

@@ -1,0 +1,19 @@
+{
+    "pedido": [
+        "Ingrese su número de pedido.",
+        "Envíe su número de pedido.",
+        "Me podría dar su número de pedido."
+    ],
+    "saludos": [
+        "Por favor para acceder a cada servicio ingrese las palabras claves:\n\t-consultar pedido\n\t-crear pedido"
+    ],
+    "crear_pedido":[
+        "Te contactamos con un asesor de ventas: "
+    ],
+    "error":[
+        "Lo lamento no entendi tu mensaje",
+        "Por favor intenta de nuevo",
+        "Opción no reconocida."
+    ]
+
+}
