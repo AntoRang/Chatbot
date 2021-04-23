@@ -25,7 +25,7 @@ def processing_hello(message: str):
 
     # if the english flow flag is true
     elif(english_flow):
-        reply+= "Thanks for reaching us. The service at the moment is unable.\n"
+        reply+= "Thanks for reaching us. The service at the moment is unavailable.\n"
 
     return reply
 
