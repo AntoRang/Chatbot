@@ -46,12 +46,3 @@ def matcher(sms):
         string_id = nlp.vocab.strings[match_id]  # get string representation (Saludo_ES / Saludo_EN)
 
     return str(string_id)
-
-
-def spanish_conversation():
-    reply = "Tienes un pedido con nosotros?, (si se tiene el número de pedido nos apoyaria con el número 😉 )"
-    return reply
-
-def english_conversation():
-    reply = "For which of our products are you requesting help? -"
-    return reply
