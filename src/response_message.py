@@ -37,6 +37,7 @@ def processing_hello(message: str):
     return reply
 
 def process_response(message:str):
+    msg_time = datetime.now() 
     category = categorize_msg(message)
     index_resp = randint(0, len(RESPONSES[category])-1)
     resp = ''
@@ -58,7 +59,7 @@ def process_response(message:str):
         resp = RESPONSES[category][index_resp]
     elif(category == "error"):
         resp = RESPONSES[category][index_resp]
-
+    utils_sms.office_hours("Recepcion", msg_time)
     create_csv(ID, category, now)
     return resp
 

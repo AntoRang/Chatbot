@@ -1,5 +1,6 @@
 import spacy
 from spacy.matcher import Matcher
+from datetime import datetime
 nlp = spacy.load('es_core_news_lg')
 
 
@@ -46,3 +47,22 @@ def matcher(sms):
         string_id = nlp.vocab.strings[match_id]  # get string representation (Saludo_ES / Saludo_EN)
 
     return str(string_id)
+
+def office_hours(personnel, msg_time):
+    msg_hour =int(msg_time.hour)
+    print(msg_hour)
+    if(personnel == "M. Espinosa" ):
+        if(msg_hour >= 10 and msg_hour < 19):
+            print("Asesor M. Espinosa")
+        else:
+            print("Fuera de horario de oficina, se registrara su solicitud y un asesor se comunicara en el siguiente horario.. ")
+
+    elif( msg_hour >= 8 and msg_hour < 17 ):
+        if( personnel == "Recepcion" ):
+            print("Asesor Recepcion")
+
+        elif( personnel == "J. Trejo"):
+            print("Asesor J. Trejo")
+        
+    else:
+        print("Fuera de horario de oficina, se registrara su solicitud y un asesor se comunicara en el siguiente horario.. ")
