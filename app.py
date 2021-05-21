@@ -9,6 +9,7 @@ app = Flask(__name__)
 @app.route("/")
 def hello():
     return "Hello, World!"
+    
 
 @app.route("/sms", methods=['POST'])
 def sms_reply():
@@ -17,9 +18,10 @@ def sms_reply():
     """Respond to incoming calls with a simple text message."""
     # Fetch the message
     req = request.form
-    print(req)
     msg = req.get('Body')
+    sender = req.get('WaId')
 
+    print(sender,':',msg)
     # Check the language if the message found a hello, hi or hola
     reply = rm.process_response(msg)
     
@@ -39,4 +41,4 @@ def sms_reply():
     return str(resp)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='10.0.0.4', port=8080, debug=True)

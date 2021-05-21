@@ -1,3 +1,4 @@
+
 import gspread
 from oauth2client.service_account import  ServiceAccountCredentials
 from pprint import pprint
@@ -12,9 +13,10 @@ CREDENTIALS = ServiceAccountCredentials.from_json_keyfile_name('src/chatbot-3138
 
 gc = gspread.authorize(CREDENTIALS)
 
-pprint(gc.list_spreadsheet_files())
-
-gc.create('test','0B4fsHHEKTip8UHJaVDNIM2VucFE')
+# for f in gc.list_spreadsheet_files():
+#     # pprint(f)
+#     # gc.del_spreadsheet(f['id'])
+gc.create('test','1_dCz7T78J33P0bEUoXRHfZyCNLC5UCy6')
 # wks = gc.open('test').sheet1
 
 # print(wks.get_all_records()) 
