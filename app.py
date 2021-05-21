@@ -16,7 +16,9 @@ def sms_reply():
     reply = ''
     """Respond to incoming calls with a simple text message."""
     # Fetch the message
-    msg = request.form.get('Body')
+    req = request.form
+    print(req)
+    msg = req.get('Body')
 
     # Check the language if the message found a hello, hi or hola
     reply = rm.process_response(msg)
