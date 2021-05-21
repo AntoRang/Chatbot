@@ -1,6 +1,6 @@
 from json import loads
 from random import randint
-from src import utils_sms
+from . import utils_sms # pylint: disable = relative-beyond-top-level
 
 RESPONSES = loads(open('src/responses.json', 'r', encoding="utf-8").read())
 
@@ -17,6 +17,7 @@ def categorize_msg(message:str):
         category_msg = "error"
     return category_msg
 
+
 def processing_hello(message: str):
     lan, spanish_flow, english_flow = utils_sms.language(message)
     reply = ''
@@ -28,6 +29,7 @@ def processing_hello(message: str):
         reply+= "Thanks for reaching us. The service at the moment is unavailable.\n"
 
     return reply
+
 
 def process_response(message:str):
     category = categorize_msg(message)
@@ -47,4 +49,4 @@ def process_response(message:str):
 
     return resp
 
-    
+   
