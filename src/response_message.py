@@ -1,6 +1,7 @@
 from json import loads
 from random import randint
-from . import utils_sms # pylint: disable = relative-beyond-top-level
+from . import utils_sms as U_SMS # pylint: disable = relative-beyond-top-level
+from . import drive_db as DB # pylint: disable = relative-beyond-top-level
 
 RESPONSES = loads(open('src/responses.json', 'r', encoding="utf-8").read())
 
@@ -19,7 +20,7 @@ def categorize_msg(message:str):
 
 
 def processing_hello(message: str):
-    lan, spanish_flow, english_flow = utils_sms.language(message)
+    lan, spanish_flow, english_flow = U_SMS.language(message)
     reply = ''
     if(spanish_flow):
         reply += "Muchas gracias por hacer contacto con nosotros\n"
@@ -27,11 +28,11 @@ def processing_hello(message: str):
     # if the english flow flag is true
     elif(english_flow):
         reply+= "Thanks for reaching us. The service at the moment is unavailable.\n"
-
+    del lan
     return reply
 
 
-def process_response(message:str):
+def process_response(message: str, phone_n: str, google_client: DB.Client):
     category = categorize_msg(message)
     index_resp = randint(0, len(RESPONSES[category])-1)
     resp = ''
@@ -46,6 +47,16 @@ def process_response(message:str):
         resp = RESPONSES[category][index_resp]
     elif(category == "error"):
         resp = RESPONSES[category][index_resp]
+
+    client_m = {
+        'mess':message,
+        'class':category,
+    }
+    server_m = {
+        'mess':resp,
+        'class':category
+    }
+    DB.save_message_pair(phone_n, client_m, server_m, google_client)
 
     return resp
 

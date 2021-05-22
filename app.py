@@ -1,10 +1,11 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse, Message, Body, Media
-from src import utils_sms 
-from src import response_message as rm
+from src import drive_db as DB 
+from src import response_message as RM
 
 # http://serverhd3.southcentralus.cloudapp.azure.com/sms
 app = Flask(__name__)
+db_connection = DB.get_connection()
 
 @app.route("/")
 def hello():
@@ -21,9 +22,8 @@ def sms_reply():
     msg = req.get('Body')
     sender = req.get('WaId')
 
-    print(sender,':',msg)
     # Check the language if the message found a hello, hi or hola
-    reply = rm.process_response(msg)
+    reply = RM.process_response(msg, sender, db_connection)
     
 
     # Create reply
@@ -41,4 +41,4 @@ def sms_reply():
     return str(resp)
 
 if __name__ == "__main__":
-    app.run(host='10.0.0.4', port=8080, debug=True)
+    app.run(host='192.168.0.171', port=8080, debug=True)

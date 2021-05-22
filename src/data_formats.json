@@ -1,0 +1,8 @@
+{
+    "logs" : [
+        "time_stamp",
+        "message",
+        "from",
+        "classification"
+    ]
+}
