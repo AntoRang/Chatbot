@@ -1,9 +1,10 @@
-from json import loads
 from random import randint
 from . import utils_sms as U_SMS # pylint: disable = relative-beyond-top-level
 from . import drive_db as DB # pylint: disable = relative-beyond-top-level
 
-RESPONSES = loads(open('src/responses.json', 'r', encoding="utf-8").read())
+
+SEMANTICS = DB.get_dataset('semantics')
+RESPONSES = DB.get_dataset('responses')
 
 
 def processing_hello(message: str):
@@ -36,6 +37,8 @@ def categorize_msg(message:str):
 def process_response(message: str, phone_n: str, google_client: DB.Client):
     category = categorize_msg(message)
     index_resp = randint(0, len(RESPONSES[category])-1)
+    last_response = DB.get_last_message(phone_n, google_client)
+    print(last_response)
     resp = ''
     if(category == "saludos"):
         resp = processing_hello(message)

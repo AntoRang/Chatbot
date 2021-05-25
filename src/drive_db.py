@@ -1,7 +1,7 @@
 from datetime import datetime
 from json import loads
 from gspread import authorize, Client
-from gspread.models import Worksheet
+from gspread.models import Worksheet, Spreadsheet
 from oauth2client.service_account import  ServiceAccountCredentials
 from .gs_api_credentials import secure_credentials as SC # pylint: disable = relative-beyond-top-level
 from pprint import pprint
@@ -40,11 +40,11 @@ def get_log_worksheet(phone: str, g_client: Client) -> Worksheet:
     return worksheet
 
 
-def get_last_message(phone: str, g_client: Client) -> str:
+def get_last_message(phone: str, g_client: Client) -> dict:
     ''' Function that returns the last message'''
     worksheet = get_log_worksheet(phone, g_client)
     last_mess = None
-    try: last_mess = str(worksheet.get_all_records()[-1]['message'])
+    try: last_mess = worksheet.get_all_records()[-1]
     except IndexError: pass
     del worksheet
     return last_mess
@@ -61,5 +61,18 @@ def save_message_pair(phone: str, client_m: dict, server_m: dict, g_client: Clie
     del worksheet
 
 
-
+def get_dataset(dataset_file: str) -> dict:
+    ''' Function that returns the static dataset'''
+    temp_gc = get_connection()
+    spreadsheet = temp_gc.open(dataset_file)
+    worksheets = [wk.title for wk in spreadsheet.worksheets()]
+    master_dict = dict()
+    for wk_name in worksheets:
+        wk = spreadsheet.worksheet(wk_name)
+        master_dict.update({wk_name:list()})
+        for rec in wk.get_all_records():
+            master_dict[wk_name].append(rec['sentence'])
+        del wk
+    del temp_gc, spreadsheet
+    return master_dict
 
