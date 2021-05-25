@@ -43,9 +43,11 @@ def get_log_worksheet(phone: str, g_client: Client) -> Worksheet:
 def get_last_message(phone: str, g_client: Client) -> str:
     ''' Function that returns the last message'''
     worksheet = get_log_worksheet(phone, g_client)
-    last_mess = worksheet.get_all_records()[-1]['message']
+    last_mess = None
+    try: last_mess = str(worksheet.get_all_records()[-1]['message'])
+    except IndexError: pass
     del worksheet
-    return str(last_mess)
+    return last_mess
     
 
 def save_message_pair(phone: str, client_m: dict, server_m: dict, g_client: Client):

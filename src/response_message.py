@@ -5,19 +5,6 @@ from . import drive_db as DB # pylint: disable = relative-beyond-top-level
 
 RESPONSES = loads(open('src/responses.json', 'r', encoding="utf-8").read())
 
-def categorize_msg(message:str):
-    message = message.lower()
-
-    if("hola" in message or "hello" in message):
-        category_msg = "saludos"
-    elif("consultar pedido" in message):
-        category_msg = "pedido"
-    elif("no tengo" in message):
-        category_msg = "crear_pedido"
-    else:
-        category_msg = "error"
-    return category_msg
-
 
 def processing_hello(message: str):
     lan, spanish_flow, english_flow = U_SMS.language(message)
@@ -30,6 +17,20 @@ def processing_hello(message: str):
         reply+= "Thanks for reaching us. The service at the moment is unavailable.\n"
     del lan
     return reply
+
+
+def categorize_msg(message:str):
+    message = message.lower()
+
+    if("hola" in message or "hello" in message):
+        category_msg = "saludos"
+    elif("consultar pedido" in message):
+        category_msg = "pedido"
+    elif("no tengo" in message):
+        category_msg = "crear_pedido"
+    else:
+        category_msg = "error"
+    return category_msg
 
 
 def process_response(message: str, phone_n: str, google_client: DB.Client):
