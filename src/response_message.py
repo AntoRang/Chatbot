@@ -32,7 +32,7 @@ def processing_hello(message: str):
     return reply
 
 
-def process_response(message: str, phone_n: str, google_client: DB.Client):
+def process_response(message: str):
     category = categorize_msg(message)
     index_resp = randint(0, len(RESPONSES[category])-1)
     resp = ''
@@ -48,16 +48,6 @@ def process_response(message: str, phone_n: str, google_client: DB.Client):
     elif(category == "error"):
         resp = RESPONSES[category][index_resp]
 
-    client_m = {
-        'mess':message,
-        'class':category,
-    }
-    server_m = {
-        'mess':resp,
-        'class':category
-    }
-    DB.save_message_pair(phone_n, client_m, server_m, google_client)
-
-    return resp
+    return resp, category
 
   

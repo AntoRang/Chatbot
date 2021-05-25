@@ -5,7 +5,6 @@ from src import response_message as RM
 
 # http://serverhd3.southcentralus.cloudapp.azure.com/sms
 app = Flask(__name__)
-db_connection = DB.get_connection()
 
 @app.route("/")
 def hello():
@@ -14,7 +13,6 @@ def hello():
 
 @app.route("/sms", methods=['POST'])
 def sms_reply():
-    
     reply = ''
     """Respond to incoming calls with a simple text message."""
     # Fetch the message
@@ -23,8 +21,20 @@ def sms_reply():
     sender = req.get('WaId')
 
     # Check the language if the message found a hello, hi or hola
-    reply = RM.process_response(msg, sender, db_connection)
+    reply, category = RM.process_response(msg)
     
+    # G_Drive connection 
+    db_connection = DB.get_connection()
+    client_m = {
+        'mess':msg,
+        'class':category,
+    }
+    server_m = {
+        'mess':reply,
+        'class':category
+    }
+    DB.save_message_pair(sender, client_m, server_m, db_connection)
+    del db_connection
 
     # Create reply
 

@@ -29,5 +29,6 @@ After getting the requirements `RUN` the app
     Eric Gómez - A01378838@exatec.tec.mx
     Antonio Rangel - A01377364@exatec.tec.mx
     Rafael Moreno - A01378916@exatec.tec.mx
+    Juan Manuel Gómez - A01372942@exatec.tec.mx
     Uriel Pineda - A01379633@exatec.tec.mx
     Hector Hernandez - A01374009@exatec.tec.mx
