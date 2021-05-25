@@ -42,10 +42,9 @@ def sms_reply():
     message1 = Message()
 
     message1.body(reply)
-    # if the spanish flow flag is true
     
    
-    # message2.media('https://demo.twilio.com/owl.png')
+    # message1.media('https://demo.twilio.com/owl.png')
 
     resp.append(message1)
     return str(resp)
