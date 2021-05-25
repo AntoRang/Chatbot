@@ -13,37 +13,26 @@ def hello():
 
 @app.route("/sms", methods=['POST'])
 def sms_reply():
-    reply = ''
     """Respond to incoming calls with a simple text message."""
+
+    # G_Drive connection 
+    db_connection = DB.get_connection()
+
+    reply = ''
     # Fetch the message
     req = request.form
     msg = req.get('Body')
     sender = req.get('WaId')
 
-    # Check the language if the message found a hello, hi or hola
-    reply, category = RM.process_response(msg)
+    # Process the response to a given message
+    reply = RM.process_response(msg, sender, db_connection)
     
-    # G_Drive connection 
-    db_connection = DB.get_connection()
-    client_m = {
-        'mess':msg,
-        'class':category,
-    }
-    server_m = {
-        'mess':reply,
-        'class':category
-    }
-    DB.save_message_pair(sender, client_m, server_m, db_connection)
     del db_connection
 
     # Create reply
-
     resp = MessagingResponse()
     message1 = Message()
-
     message1.body(reply)
-    
-   
     # message1.media('https://demo.twilio.com/owl.png')
 
     resp.append(message1)
