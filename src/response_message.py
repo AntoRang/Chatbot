@@ -38,10 +38,10 @@ def complete_response(text:str, category:str, lang:str) -> str:
             text = url.join(text.split('*http*'))
         elif category == 'consulta_pedido2' or category == 'crear_pedido':
             now = datetime.now()
-            now_hour = now.hour+1 if now.minute >= 1 else now.hour 
+            now_hour = now.hour
             df = WA_CONTACTS[category]
             df = df[df['lang'] == lang]
-            df = df[(df['service_start']<now_hour) & (df['service_end']>now_hour)]
+            df = df[(df['service_start']>=now_hour) & (df['service_end']<now_hour)]
             urls = df['contact_url'].tolist()
             names = df['name'].tolist()
             if len(urls) >= 1:
