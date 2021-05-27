@@ -63,7 +63,7 @@ def get_last_message(phone: str, g_client: Client) -> dict:
 
 def save_message_pair(phone: str, client_m: dict, server_m: dict, g_client: Client):
     ''' Function that saves client an server messages in the respective phone number log'''
-    time_stamp = datetime.now().strftime('%d/%m/%Y %H:%M:%S.%f')
+    time_stamp = datetime.now().isoformat()
     worksheet = get_log_worksheet(phone, g_client)
     worksheet.append_rows([
         [time_stamp, client_m['mess'], 'client', client_m['class']],
