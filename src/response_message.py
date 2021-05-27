@@ -1,60 +1,75 @@
 from random import randint
-from . import utils_sms as U_SMS # pylint: disable = relative-beyond-top-level
+from datetime import datetime
+from googletrans import  Translator
 from . import drive_db as DB # pylint: disable = relative-beyond-top-level
+from . import gs_translator as GT # pylint: disable = relative-beyond-top-level
 
 
-SEMANTICS = DB.get_dataset('semantics')
-RESPONSES = DB.get_dataset('responses')
+DATASETS = DB.get_all_datasets(['semantics','responses','wa_contacts','ex_links']) 
+SEMANTICS = DATASETS['semantics']
+RESPONSES = DATASETS['responses']
+WA_CONTACTS = DATASETS['wa_contacts']
+EX_LINKS = DATASETS['ex_links']
+del DATASETS
+ALLOW_LANGS = ['en','es']
 
-
-def processing_hello(message: str):
-    lan, spanish_flow, english_flow = U_SMS.language(message)
-    reply = ''
-    if(spanish_flow):
-        reply += "Muchas gracias por hacer contacto con nosotros\n"
-
-    # if the english flow flag is true
-    elif(english_flow):
-        reply+= "Thanks for reaching us. The service at the moment is unavailable.\n"
-    del lan
-    return reply
-
-
-def categorize_msg(message:str):
-    message = message.lower()
-
-    if("hola" in message or "hello" in message):
-        category_msg = "saludos"
-    elif("consultar pedido" in message):
-        category_msg = "pedido"
-    elif("no tengo" in message):
-        category_msg = "crear_pedido"
+def categorize_msg(message:str, prev_message:dict) -> str:
+    ''' Function that sets a category to given message'''
+    catego = None
+    if prev_message['type'] == 'consulta_pedido':
+        catego = 'consulta_pedido2'
     else:
-        category_msg = "error"
-    return category_msg
+        for category in SEMANTICS.keys():
+            sentence_list = SEMANTICS[category]['sentence'].tolist()
+            if message in sentence_list:
+                catego = category
+        if catego == None:
+            catego = 'error'
+    return catego
 
 
-def process_response(message: str, phone_n: str, google_client: DB.Client):
-    category = categorize_msg(message)
-    index_resp = randint(0, len(RESPONSES[category])-1)
+def complete_response(text:str, category:str, lang:str) -> str:
+    ''' Function that completes a given message'''
+    if '*http*' in text:
+        if category == 'saludos':
+            df = EX_LINKS['refleon.com']
+            urls = df[df['lang'] == lang]['url'].tolist()
+            url = urls[randint(0, len(urls)-1)]
+            text = url.join(text.split('*http*'))
+        elif category == 'consulta_pedido2' or category == 'crear_pedido':
+            now = datetime.now()
+            now_hour = now.hour+1 if now.minute >= 1 else now.hour 
+            df = WA_CONTACTS[category]
+            df = df[df['lang'] == lang]
+            df = df[(df['service_start']<now_hour) & (df['service_end']>now_hour)]
+            urls = df['contact_url'].tolist()
+            names = df['name'].tolist()
+            if len(urls) >= 1:
+                rand_index = randint(0, len(urls)-1)
+                url = names[rand_index]+ ' ' + urls[rand_index]
+                text = url.join(text.split('*http*'))
+            else:
+                text = 'Por el momento nadie le puede atender, intente en un horario de 8 a 17 hrs'
+    return text
+
+
+def process_response(message: str, phone_n: str, google_client: DB.Client) -> str:
+    ''' Function that process a new user message'''
+    message, org_lang = GT.any_to_spanish(message)
     last_response = DB.get_last_message(phone_n, google_client)
-    print(last_response)
-    resp = ''
-    if(category == "saludos"):
-        resp = processing_hello(message)
-        if("Thanks" not in resp):
-            resp += RESPONSES[category][index_resp]
-    elif(category == "crear_pedido"):
-        asesor = " https://wa.me/qr/HH2HOX4KWQ4PA1" # Asesores
-        resp = RESPONSES[category][index_resp] + asesor
-    elif(category == "pedido"):
-        resp = RESPONSES[category][index_resp]
-    elif(category == "error"):
-        resp = RESPONSES[category][index_resp]
+    category = categorize_msg(message, last_response)
+    categ_resp_list = RESPONSES[category]['sentence'].tolist()
+    index_resp = randint(0, len(categ_resp_list)-1)
+    resp = categ_resp_list[index_resp]
+
+    if org_lang in ALLOW_LANGS:
+        resp = complete_response(resp, category, org_lang)
+        if org_lang != 'es':
+            message = GT.spanish_to_any(message, org_lang)
+            resp = GT.spanish_to_any(resp, org_lang)
 
     client_m = {'mess': message, 'class': category}
     server_m = {'mess': resp, 'class': category}
     DB.save_message_pair(phone_n, client_m, server_m, google_client)
 
     return resp
-  

@@ -1,8 +1,25 @@
 {
-    "logs" : [
+    "logs": [
         "time_stamp",
         "message",
         "from",
-        "classification"
+        "type"
+    ],
+    "wa_contacts": [
+        "name",
+        "contact_url",
+        "service_start",
+        "service_end",
+        "lang"
+    ],
+    "ex_links":[
+        "url",
+        "lang"
+    ],
+    "semantics": [
+        "sentence"
+    ],
+    "responses": [
+        "sentence"
     ]
 }

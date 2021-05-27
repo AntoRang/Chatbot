@@ -21,7 +21,7 @@ def sms_reply():
     reply = ''
     # Fetch the message
     req = request.form
-    msg = req.get('Body')
+    msg = str(req.get('Body')).lower()
     sender = req.get('WaId')
 
     # Process the response to a given message
