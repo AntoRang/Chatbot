@@ -69,7 +69,7 @@ def process_response(message: str, phone_n: str, google_client: DB.Client) -> st
     resp = complete_response(resp, category, org_lang)
     #translate response to original lang
     if org_lang != 'es':
-        message = GT.spanish_to_any(message, org_lang)
+        message = org_message
         resp = GT.spanish_to_any(resp, org_lang)
 
     client_m = {'mess': message, 'class': category, 'lang': org_lang}
