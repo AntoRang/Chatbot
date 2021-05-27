@@ -11,7 +11,7 @@ RESPONSES = DATASETS['responses']
 WA_CONTACTS = DATASETS['wa_contacts']
 EX_LINKS = DATASETS['ex_links']
 del DATASETS
-ALLOW_LANGS = ['en','es']
+
 
 def categorize_msg(message:str, prev_message:dict) -> str:
     ''' Function that sets a category to given message'''
@@ -55,6 +55,7 @@ def complete_response(text:str, category:str, lang:str) -> str:
 
 def process_response(message: str, phone_n: str, google_client: DB.Client) -> str:
     ''' Function that process a new user message'''
+    org_message = message
     message, org_lang = GT.any_to_spanish(message)
     last_response = DB.get_last_message(phone_n, google_client)
     category = categorize_msg(message, last_response)
@@ -62,14 +63,18 @@ def process_response(message: str, phone_n: str, google_client: DB.Client) -> st
     index_resp = randint(0, len(categ_resp_list)-1)
     resp = categ_resp_list[index_resp]
 
-    if org_lang in ALLOW_LANGS:
-        resp = complete_response(resp, category, org_lang)
-        if org_lang != 'es':
-            message = GT.spanish_to_any(message, org_lang)
-            resp = GT.spanish_to_any(resp, org_lang)
+    #Avoid translation if message category like consulta_pedido2 to preserve the org message
+    if category == 'consulta_pedido2': message, org_lang = org_message, last_response['lang']
 
-    client_m = {'mess': message, 'class': category}
-    server_m = {'mess': resp, 'class': category}
+    index_resp = randint(0, len(categ_resp_list)-1)
+    resp = complete_response(resp, category, org_lang)
+    #translate response to original lang
+    if org_lang != 'es':
+        message = GT.spanish_to_any(message, org_lang)
+        resp = GT.spanish_to_any(resp, org_lang)
+
+    client_m = {'mess': message, 'class': category, 'lang': org_lang}
+    server_m = {'mess': resp, 'class': category, 'lang': org_lang}
     DB.save_message_pair(phone_n, client_m, server_m, google_client)
 
     return resp

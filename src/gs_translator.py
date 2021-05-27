@@ -21,7 +21,7 @@ def spanish_to_any(text: str, any_lang:str ) -> str:
     ''' Function that returns the translated text of a given lang'''
     gt = Translator(service_urls=S_URLS)
     try:
-        org_txt = str(gt.translate(text, src='es', dest=any_lang).text).lower()
+        org_txt = gt.translate(text, src='es', dest=any_lang).text
         del gt
         return org_txt
     except Exception:

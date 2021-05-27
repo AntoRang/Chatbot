@@ -66,8 +66,8 @@ def save_message_pair(phone: str, client_m: dict, server_m: dict, g_client: Clie
     time_stamp = datetime.now().isoformat()
     worksheet = get_log_worksheet(phone, g_client)
     worksheet.append_rows([
-        [time_stamp, client_m['mess'], 'client', client_m['class']],
-        [time_stamp, server_m['mess'], 'server', server_m['class']]
+        [time_stamp, client_m['lang'], client_m['mess'], 'client', client_m['class']],
+        [time_stamp, server_m['lang'], server_m['mess'], 'server', server_m['class']]
     ])
     del worksheet
 

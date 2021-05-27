@@ -1,6 +1,7 @@
 {
     "logs": [
         "time_stamp",
+        "lang",
         "message",
         "from",
         "type"
