@@ -14,11 +14,6 @@ First make sure that the requirements are correctly installed. The dependencies 
 ```shell
 ~$ pip install -r requirements.txt
 ```
-`NOTE: After installing requirements install 'spacy cores': `
-
-```shell
-~$ python -m spacy download es_core_news_lg
-```
 After getting the requirements `RUN` the app
 
 ```shell
