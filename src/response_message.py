@@ -66,7 +66,6 @@ def process_response(message: str, phone_n: str, google_client: DB.Client) -> st
     #Avoid translation if message category like consulta_pedido2 to preserve the org message
     if category == 'consulta_pedido2': message, org_lang = org_message, last_response['lang']
 
-    index_resp = randint(0, len(categ_resp_list)-1)
     resp = complete_response(resp, category, org_lang)
     #translate response to original lang
     if org_lang != 'es':
