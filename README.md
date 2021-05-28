@@ -21,6 +21,7 @@ After getting the requirements `RUN` the backend server
 ~$ python app.py
 ```
 ---
+
 ## `WARNING ZONE:`
 ### Delete LOG Database
 First ensure that the SERVER is OFFLINE before you delete the log database, then execute the `delete_log_db.py`.
