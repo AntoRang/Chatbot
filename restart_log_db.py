@@ -12,7 +12,7 @@ def main():
     print(warn_text)
     usr = str()
     while usr.lower() != 'y':
-        usr = str(input("Esata seguro que deséa ELIMINAR la Log DB (y/n): " ))
+        usr = str(input("Esata seguro que quiere ELIMINAR la Log DB? (y/n): " ))
     DB.delete_logs()
 
 main()
