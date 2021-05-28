@@ -65,12 +65,17 @@ def process_response(message: str, phone_n: str, google_client: DB.Client) -> st
     #Avoid translation if message category like consulta_pedido2 to preserve the org message
     if category == 'consulta_pedido2': message, org_lang = org_message, last_response['lang']
 
-    resp = complete_response(resp, category, org_lang)
     #translate response to original lang
     if org_lang != 'es':
+        # Avoid translation of *http* tag
+        if '*http*' in resp:
+            resp_split = [GT.spanish_to_any(re_part, org_lang) for re_part in resp.split('*http*')]
+            resp = ' *http* \n'.join(resp_split)
+        else:
+            resp = GT.spanish_to_any(resp, org_lang)
         message = org_message
-        resp = GT.spanish_to_any(resp, org_lang)
-
+    
+    resp = complete_response(resp, category, org_lang)
     client_m = {'mess': message, 'class': category, 'lang': org_lang}
 
     if category == 'error':
