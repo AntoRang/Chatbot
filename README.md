@@ -14,11 +14,18 @@ First make sure that the requirements are correctly installed. The dependencies 
 ```shell
 ~$ pip install -r requirements.txt
 ```
-After getting the requirements `RUN` the app
+## Run Server
+After getting the requirements `RUN` the backend server
 
 ```shell
 ~$ python app.py
 ```
+## `WARNING ZONE:`
+First ensure that the SERVER is OFFLINE before you delete the log database, then execute the `delete_log_db.py`.
+```shell
+~$ python delete_log_db.py
+```
+
 ---
 ### Collaborators
     Eric Gómez - A01378838@exatec.tec.mx

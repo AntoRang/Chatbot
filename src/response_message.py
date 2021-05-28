@@ -48,7 +48,7 @@ def complete_response(text:str, category:str, lang:str) -> str:
                 url = names[rand_index]+ ' ' + urls[rand_index]
                 text = url.join(text.split('*http*'))
             else:
-                text = 'Por el momento nadie le puede atender, reintente en un horario de 8 a 17 hrs'
+                text = 'Por el momento nadie le puede atender, reintente en un horario de 8 a 17 hrs (GMT-5)'
     return text
 
 

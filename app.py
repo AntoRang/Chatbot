@@ -18,15 +18,17 @@ def sms_reply():
     # G_Drive connection 
     db_connection = DB.get_connection()
 
-    reply = ''
+    reply = str()
     # Fetch the message
     req = request.form
     msg = str(req.get('Body')).lower()
     sender = req.get('WaId')
 
     # Process the response to a given message
-    reply = RM.process_response(msg, sender, db_connection)
-    
+    try:
+        reply = RM.process_response(msg, sender, db_connection)
+    except DB.APIError:
+        reply = 'Server bussy...\n Please wait 2 minutes after new request'
     del db_connection
 
     # Create reply
