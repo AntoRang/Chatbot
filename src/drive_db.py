@@ -104,28 +104,27 @@ def get_dataset(dataset_file: str, g_client: Client) -> dict:
 
 def get_all_datasets(d_files: list) -> dict:
     ''' Function that returns the server datasets as dict of dicts'''
-    gc = get_connection()
-    data = {file:dict() for file in d_files}
-    for file in d_files:
-        try:
+    try:
+        gc = get_connection()
+        data = {file:dict() for file in d_files}
+        for file in d_files:
             data[file] = get_dataset(file, gc)
-        except APIError:
-            print('DB bussy, please wait...')
-            sleep(120)
-            return get_all_datasets(d_files)
-    del gc
-    return data
+        del gc
+        return data
+    except APIError:
+        print('DB bussy, please wait...')
+        sleep(120)
+        return get_all_datasets(d_files)
 
 
 def delete_logs():
     ''' Function that flushs the log database'''
-    gc = get_connection()
-    for file in gc.list_spreadsheet_files():
-        if str(file['name']).isnumeric() :
-            try:
+    try:
+        gc = get_connection()
+        for file in gc.list_spreadsheet_files():
+            if str(file['name']).isnumeric() :
                 gc.del_spreadsheet(file['id'])
-            except APIError:
-                sleep(120)
-                del gc
-                delete_logs()
-    del gc
+        del gc
+    except APIError:
+        sleep(120)
+        delete_logs()
