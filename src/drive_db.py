@@ -99,3 +99,8 @@ def get_all_datasets(d_files: list) -> dict:
     del gc
     return data
 
+def delete_logs():
+    gc = get_connection()
+    # for file in gc.list_spreadsheet_files():
+
+    del gc
