@@ -72,7 +72,11 @@ def process_response(message: str, phone_n: str, google_client: DB.Client) -> st
         resp = GT.spanish_to_any(resp, org_lang)
 
     client_m = {'mess': message, 'class': category, 'lang': org_lang}
-    server_m = {'mess': resp, 'class': category, 'lang': org_lang}
-    DB.save_message_pair(phone_n, client_m, server_m, google_client)
+
+    if category == 'error':
+        DB.save_client_msg(phone_n, client_m, google_client)
+    else:
+        server_m = {'mess': resp, 'class': category, 'lang': org_lang}
+        DB.save_message_pair(phone_n, client_m, server_m, google_client)
 
     return resp

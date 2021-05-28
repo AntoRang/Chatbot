@@ -1,7 +1,9 @@
 from json import loads
+from time import sleep
 from datetime import datetime
 from pandas import DataFrame
 from gspread import authorize, Client
+from gspread.exceptions import APIError
 from gspread.models import Worksheet, Spreadsheet
 from oauth2client.service_account import  ServiceAccountCredentials
 from .gs_api_credentials import secure_credentials as SC # pylint: disable = relative-beyond-top-level
@@ -59,7 +61,17 @@ def get_last_message(phone: str, g_client: Client) -> dict:
     except IndexError: last_mess = {col:None for col in data_f}
     del worksheet
     return last_mess
-    
+
+
+def save_client_msg(phone: str, client_m: dict, g_client: Client):
+    ''' Function that saves client an server messages in the respective phone number log'''
+    time_stamp = datetime.now().isoformat()
+    worksheet = get_log_worksheet(phone, g_client)
+    worksheet.append_row(
+        [time_stamp, client_m['lang'], client_m['mess'], 'server', client_m['class']]
+    )
+    del worksheet
+
 
 def save_message_pair(phone: str, client_m: dict, server_m: dict, g_client: Client):
     ''' Function that saves client an server messages in the respective phone number log'''
@@ -95,12 +107,25 @@ def get_all_datasets(d_files: list) -> dict:
     gc = get_connection()
     data = {file:dict() for file in d_files}
     for file in d_files:
-        data[file] = get_dataset(file, gc)
+        try:
+            data[file] = get_dataset(file, gc)
+        except APIError:
+            print('DB bussy, please wait...')
+            sleep(120)
+            return get_all_datasets(d_files)
     del gc
     return data
 
-def delete_logs():
-    gc = get_connection()
-    # for file in gc.list_spreadsheet_files():
 
+def delete_logs():
+    ''' Function that flushs the log database'''
+    gc = get_connection()
+    for file in gc.list_spreadsheet_files():
+        if str(file['name']).isnumeric() :
+            try:
+                gc.del_spreadsheet(file['id'])
+            except APIError:
+                sleep(120)
+                del gc
+                delete_logs()
     del gc
