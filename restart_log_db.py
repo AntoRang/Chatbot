@@ -1,4 +1,4 @@
-from src.drive_db import delete_logs
+from src import drive_db as DB
 
 def main():
     warn_text = '''
@@ -13,6 +13,6 @@ def main():
     usr = str()
     while usr.lower() != 'y':
         usr = str(input("Esata seguro que deséa ELIMINAR la Log DB (y/n): " ))
-    delete_logs()
+    DB.delete_logs()
 
 main()
