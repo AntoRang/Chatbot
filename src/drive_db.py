@@ -12,6 +12,7 @@ LOGS_FOLDER_ID = '1_dCz7T78J33P0bEUoXRHfZyCNLC5UCy6'
 DATA_FORMATS = loads(open('src/data_formats.json','r', encoding=SC.ENCODING).read())
 
 def get_connection() -> Client:
+    ''' Returns a Client conected to google drive-spreadsheets'''
     SCOPE = [
         'https://www.googleapis.com/auth/spreadsheets',
         'https://www.googleapis.com/auth/drive'
