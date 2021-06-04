@@ -12,7 +12,7 @@ First make sure that the requirements are correctly installed. The dependencies 
 `pip`
 
 ```shell
-~$ pip install -r requirements.txt
+~$ python -m pip install -r requirements.txt
 ```
 ## Run Server
 After getting the requirements `RUN` the backend server

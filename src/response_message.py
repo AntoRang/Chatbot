@@ -38,7 +38,7 @@ def complete_response(text:str, category:str, lang:str) -> str:
             urls = df[df['lang'] == lang]['url'].tolist()
             url = urls[randint(0, len(urls)-1)]
             text = url.join(text.split('*http*'))
-        elif category == 'consulta_pedido2' or category == 'crear_pedido':
+        elif category == 'consulta_pedido2' or category == 'crear_pedido2':
             now_hour = datetime.now().hour
             df = WA_CONTACTS[category]
             df = df[df['lang'] == lang]
